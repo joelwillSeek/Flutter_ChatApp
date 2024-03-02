@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chatapp/list_chat_history.dart';
 import 'package:flutter_chatapp/messageAndSendButton.dart';
+import 'package:flutter_chatapp/provider/chat_history_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MainApp());
@@ -8,37 +11,17 @@ void main() {
 class MainApp extends StatelessWidget {
   MainApp({super.key});
 
-  final List<Map<String, String>> chatHistory = [
-    {
-      "message": "message",
-      "date": "month/day/year",
-    }
-  ];
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(primaryColor: Colors.blue),
       home: Scaffold(
-        body: Column(
-          children: [
-            Expanded(
-              flex: 5,
-              child: ListView.builder(
-                itemCount: chatHistory.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: Column(children: [
-                      Text(chatHistory[index]["message"].toString()),
-                      Text(chatHistory[index]["date"].toString()),
-                    ]),
-                  );
-                },
-              ),
-            ),
-            const MessageAndSendButton()
-          ],
+          body: ChangeNotifierProvider(
+        create: (context) => ChatHistoryProvider(),
+        child: Column(
+          children: [const ListChatHistory(), MessageAndSendButton()],
         ),
-      ),
+      )),
     );
   }
 }
